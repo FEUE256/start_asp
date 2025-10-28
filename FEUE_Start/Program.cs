@@ -8,6 +8,15 @@ builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
     .AddNegotiate();
 builder.Services.AddAuthorization();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(7022, listenOptions =>
+    {
+        listenOptions.UseHttps(); // SSL behövs för Windows Auth
+    });
+    options.ListenAnyIP(5138); // HTTP
+});
+
 var app = builder.Build();
 
 app.UseStaticFiles();
